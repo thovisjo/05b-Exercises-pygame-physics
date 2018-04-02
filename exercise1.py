@@ -22,9 +22,9 @@ logger = logging.getLogger(__name__)
 screen_size = (600,600)
 FPS = 60
 black = (0,0,0)
-gravity = 0
-friction = 0
-air_resistance = 0
+gravity = 8
+friction = .9
+air_resistance = .4
 
 class Ball(pygame.sprite.Sprite):
 	def __init__(self, i, size, color, position, direction):
@@ -41,29 +41,29 @@ class Ball(pygame.sprite.Sprite):
 	def update(self):
 		(dx,dy) = self.direction	# get the current velocity
 		self.rect.x += dx		# move the sprite horizontally
-		self.rect.y += dy
+		self.rect.y += dy               # move the sprite vertically
 
-		dy = dy + gravity
-		dx *= (1.0-air_resistance)
-		dy *= (1.0-air_resistance)
+		dy = dy + gravity               # changes the vertical velocity by adding in whatever the gravity would add in to its velocity
+		dx *= (1.0-air_resistance)      # adds in air resistance to horizontal velocity.
+		dy *= (1.0-air_resistance)      # adds in air resistance to vertical velocity.
 		
-		(WIDTH,HEIGHT) = screen_size
-		if self.rect.right >= WIDTH:
-			self.rect.right = WIDTH
-			dx = dx * -1 * (1.0-friction)
-		if self.rect.left <= 0:
-			self.rect.left = 0
-			dx = dx * -1 * (1.0-friction)
-		if self.rect.top <= 0:
-			self.rect.top = 0
-			dy = dy * -1 * (1.0-friction)
-		if self.rect.bottom >= HEIGHT:
-			self.rect.bottom = HEIGHT
-			dx = dx * -1 * (1.0-friction)
-			dy = dy * -1 * (1.0-friction)
+		(WIDTH,HEIGHT) = screen_size    # sets the width and height of the pygame window
+		if self.rect.right >= WIDTH:    
+			self.rect.right = WIDTH         # if the balls hit the side of the screen, they bounce off or stop in these 5 lines
+			dx = dx * -1 * (1.0-friction)   # 
+		if self.rect.left <= 0:                 #
+			self.rect.left = 0              # 
+			dx = dx * -1 * (1.0-friction)   #
+		if self.rect.top <= 0:                  # if the balls hit the bottom or top, they bounce off or stop in these 7 lines
+			self.rect.top = 0               #
+			dy = dy * -1 * (1.0-friction)   #
+		if self.rect.bottom >= HEIGHT:          #
+			self.rect.bottom = HEIGHT       #
+			dx = dx * -1 * (1.0-friction)   #
+			dy = dy * -1 * (1.0-friction)   #
 			if abs(dy) < 1:			# a hack to keep it from bouncing forever
 				dy = 0
-		self.direction = (dx,dy)
+		self.direction = (dx,dy)                # changes the velocity. Allows for acceleration.
 
 
 def main():

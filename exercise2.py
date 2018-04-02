@@ -65,23 +65,23 @@ class Ball(pygame.sprite.Sprite):
 		'''
 		(dx,dy) = self.direction				# the x and y components of the direction
 		(odx,ody) = other_object.direction		# the x and y components of the other object's direction
-		(cx,cy) = self.rect.center
-		(ocx,ocy) = other_object.rect.center
-		radius = self.rect.width/2
-		oradius = other_object.rect.width/2
+		(cx,cy) = self.rect.center      # the center of the object
+		(ocx,ocy) = other_object.rect.center    # the center of the other object
+		radius = self.rect.width/2      # the radius of the object
+		oradius = other_object.rect.width/2     # the radius of the other object
 		#find the hypotenuse
 		distance = math.sqrt(abs(cx-ocx)**2 + abs(cy-ocy)**2)
 		if distance <= 0:
-			distance = 0.1
-		combined_distance = (radius+oradius)
+			distance = 0.1 # Makes sure the distance is useable
+		combined_distance = (radius+oradius)    #distance between the centers
 		if distance <= combined_distance:	#collision
 			normal = ((cx-ocx)/distance,(cy-ocy)/distance)	# a vector tangent to the plane of collision
 			velocity_delta = ((odx-dx),(ody-dy))	#the relative difference between the speed of the two objects
-			(nx,ny) = normal
-			(vdx,vdy) = velocity_delta
-			dot_product = nx*vdx + ny*vdy
+			(nx,ny) = normal        # makes the normal easier to use
+			(vdx,vdy) = velocity_delta      # uses the velocity delta
+			dot_product = nx*vdx + ny*vdy   # sees if the objects are moving towards one another by assigning it to a variable.
 			if dot_product >= 0:	#check if the objects are moving toward each other
-				impulse_strength = dot_product * (self.mass / other_object.mass)
+				impulse_strength = dot_product * (self.mass / other_object.mass) # the next 8 lines do some math but the basic is that they edit the objects' velocities because the objects collided. This makes them bounce off each other. 
 				impulse = (ix,iy) = (impulse_strength * nx, impulse_strength * ny)
 				dx += ix * (other_object.mass/self.mass)
 				dy += iy * (other_object.mass/self.mass)
